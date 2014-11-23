@@ -147,9 +147,9 @@ var legalMovesPawn = function (pawn, friends, foes) {
 }
 
 var legalMovesPawnBlack = function (pawn, friends, foes) {
-  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48];
+  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48],
       onStartingSquare = staringSquares.indexOf(pawn) !== -1,
-      legalMoves = [],
+      legalMovesList = [],
       possibleMove = pawn - 8;
       if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
         legalMoves.push(possibleMove);
@@ -160,7 +160,7 @@ var legalMovesPawnBlack = function (pawn, friends, foes) {
           legalMoves.push(possibleMove);
         }
       }
-  return legalMoves;
+  return legalMovesList;
 }
 
 var legalMovesPawnWhite = function (pawn, friends, foes) {
