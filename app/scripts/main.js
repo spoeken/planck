@@ -21,7 +21,9 @@ var fenParser = function(fen) {
     }
 
   };
-}
+};
+
+
 
 
 $(function() {
@@ -41,6 +43,13 @@ $(function() {
     K: "/white/king.png",
     P: "/white/pawn.png"
   };
+  // Turn each value into an image
+  for (key in pieces) {
+    var image = new Image();
+    image.src = '/images/' + pieces[key];
+    pieces[key] = image;
+  }
+
 
 
   var game = new Sketch.create({
@@ -72,12 +81,15 @@ $(function() {
         } else {
           this.fillStyle = '#aaa';
         }
+        
         this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
 
-        // var key = board[i];
-        // if(this.pieces[key] !== null){
-          
-        // }
+        var key = board[i];
+        if(key !== null){
+          // console.log('im not null');
+          var src = pieces[key];
+          this.drawImage(src, (i % 8) * this.squareSize, Math.floor(i/8) * this.squareSize, this.squareSize /1.1, this.squareSize /1.1);
+        }
 
       };
     }
