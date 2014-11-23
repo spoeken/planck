@@ -69,9 +69,6 @@ $(function() {
 
 
     draw: function() {
-      
-
-      
 
       for (var i = board.length - 1; i >= 0; i--) {
         if(i % 2 && !(Math.floor(i/8) % 2)){
@@ -84,14 +81,33 @@ $(function() {
         
         this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
 
+        // Some array is gonna be a array of possible moves 
+        // if(someArray.indexOf(i)){
+        //   this.fillStyle = 'rgba(68, 134, 250, 0.5)';
+        //   this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
+        // }
+
         var key = board[i];
         if(key !== null){
           // console.log('im not null');
           var src = pieces[key];
-          this.drawImage(src, (i % 8) * this.squareSize, Math.floor(i/8) * this.squareSize, this.squareSize /1.1, this.squareSize /1.1);
+          this.drawImage(src, ((i % 8) * this.squareSize) + this.squareSize * 0.05, Math.floor(i/8) * this.squareSize + this.squareSize * 0.05, this.squareSize /1.2, this.squareSize /1.2);
         }
 
       };
+    },
+
+    mouseup: function(e){
+      
+      //Find clicked square
+      var x = e.x;
+      var y = e.y;
+      var xIndex = floor(x / this.squareSize);
+      var yIndex = floor(y / this.squareSize);
+
+      var index = xIndex + (yIndex*8); //The index of the clicked square
+
+
     }
 
   });
