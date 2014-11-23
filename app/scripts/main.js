@@ -114,3 +114,75 @@ $(function() {
 
 
 });
+
+var legalMoves = function (piece) {
+  var friends = [],
+      foes = [],
+      i;
+  pieceType = board[piece];
+
+  for (i = 0; i < board.length; i += 1) {
+    if (board[i]) {
+      if (isSameColor(piece, i)) {
+        friends.push(i);
+      } else {
+        foes.push(i);
+      }
+    }
+  }
+  switch (pieceType) {
+    case 'p':
+    case 'P':
+      return legalMovesPawn(piece, friends, foes);
+      break;
+  }
+}
+
+var legalMovesPawn = function (pawn, friends, foes) {
+  if (isWhite(pawn)) {
+    return legalMovesPawnWhite(pawn, friends, foes)
+  } else if (isBlack(pawn)) {
+      return legalMovesPawnBlack(pawn, friends, foes)
+  }
+}
+
+var legalMovesPawnBlack = function (pawn, friends, foes) {
+  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
+      onStartingSquare = staringSquares.indexOf(pawn) !== -1,
+      legalMoves = [],
+      possibleMove = pawn + 8;
+      if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
+        legalMoves.push(possibleMove);
+      }
+      if (onStartingSquare) {
+        possibleMove = possibleMove + 8;
+        if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
+          legalMoves.push(possibleMove);
+        }
+      }
+  return legalMoves;
+}
+
+var legalMovesPawnWhite = function (pawn, friends, foes) {
+  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48];
+      onStartingSquare = isWhite(pawn) && staringSquares.indexOf(pawn);
+}
+
+var isWhite = function(piece) {
+  // console.log(board[piece]);
+  return 'rbqknp'.indexOf(board[piece]) !== -1;
+}
+
+var isBlack = function(piece) {
+  // console.log(board[piece]);
+  return 'RBQKNP'.indexOf(board[piece]) !== -1;
+}
+
+var isEmpty = function(piece) {
+  // console.log(board[piece]);
+  return !('rbqknpRBQKNP'.indexOf(board[piece]) !== -1);
+}
+
+var isSameColor = function(p1, p2) {
+  return (isWhite(p1) && isWhite(p2)) || (isBlack(p1) && isBlack(p2));
+}
