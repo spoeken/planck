@@ -1,11 +1,12 @@
 var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 var board = [];
+var legalMovesArray = [];
 
 var fenParser = function(fen) {
 
   // console.log('parsing');
-
-  for (var i = fen.length - 1; i >= 0; i--) {
+  for(var i = 0; i < fen.length; i++){
+  // for (var i = fen.length - 1; i >= 0; i--) {
     // console.log(fen[i]);
 
     if (('rbqknpRBQKNP').indexOf(fen[i]) !== -1) {
@@ -81,11 +82,11 @@ $(function() {
         
         this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
 
-        // Some array is gonna be a array of possible moves 
-        // if(someArray.indexOf(i)){
-        //   this.fillStyle = 'rgba(68, 134, 250, 0.5)';
-        //   this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
-        // }
+         
+        if(legalMovesArray.indexOf(i) !== -1){
+          this.fillStyle = 'rgba(68, 134, 250, 0.5)';
+          this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
+        }
 
         var key = board[i];
         if(key !== null){
@@ -106,6 +107,9 @@ $(function() {
       var yIndex = floor(y / this.squareSize);
 
       var index = xIndex + (yIndex*8); //The index of the clicked square
+
+      legalMovesArray = legalMoves(index);
+      console.log(legalMovesArray);
 
 
     }
@@ -131,10 +135,12 @@ var legalMoves = function (piece) {
     }
   }
   switch (pieceType) {
-    case 'p':
+    // case 'p':
     case 'P':
       return legalMovesPawn(piece, friends, foes);
       break;
+    default:
+      return [];
   }
 }
 
