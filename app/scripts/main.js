@@ -24,7 +24,6 @@ var fenParser = function(fen) {
 }
 
 
-
 $(function() {
 
   fenParser(fen);
@@ -50,6 +49,8 @@ $(function() {
     setup: function() {
       console.log('setup');
 
+      this.squareSize = this.width/8;
+
     },
 
     update: function() {
@@ -57,21 +58,29 @@ $(function() {
 
     },
 
+
     draw: function() {
-      this.fillStyle = 'rgb(' + ~~this.r + ',' + ~~this.g + ',' + ~~this.b + ')';
-      this.fillRect(0, 0, this.width, this.height);
+      
 
-      // for (var i = this.board.length - 1; i >= 0; i--) {
-      //  var key = this.board[i];
-      //  if(this.pieces[key] !== null){
-      //    var src = this.pieces[key].color + "/" + this.pieces[key].piece + ".png";
-      //    // "black/rook.png"
-      //  }
+      
 
-      // };
+      for (var i = board.length - 1; i >= 0; i--) {
+        if(i % 2 && !(Math.floor(i/8) % 2)){
+          this.fillStyle = '#333';
+        } else if (!(i % 2) && Math.floor(i/8) % 2){
+          this.fillStyle = '#333';
+        } else {
+          this.fillStyle = '#aaa';
+        }
+        this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
+
+        // var key = board[i];
+        // if(this.pieces[key] !== null){
+          
+        // }
+
+      };
     }
-
-
 
   });
 
