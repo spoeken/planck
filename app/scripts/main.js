@@ -1,5 +1,9 @@
 //var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-var fen = "rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR";
+//var fen = "rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR";
+//var fen = "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R";
+//var fen = "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR";
+//var fen = "8/8/3k4/1p5p/PP4P1/8/2K5/8"
+var fen = "8/8/3k4/pppppppP/PPPPPPPP/PPPPPPPP/2K5/8"
 var board = [];
 var legalMovesArray = [];
 
@@ -145,48 +149,42 @@ var legalMoves = function (piece) {
 }
 
 var legalMovesPawn = function (pawn, friends, foes) {
-  if (isWhite(pawn)) {
-    return legalMovesPawnWhite(pawn, friends, foes)
-  } else if (isBlack(pawn)) {
-      return legalMovesPawnBlack(pawn, friends, foes)
-  }
-}
-
-var legalMovesPawnBlack = function (pawn, friends, foes) {
-  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
+  var white = isWhite(pawn),
+      foreward = white ? -8 : +8,
+      attack = white ? [-7,-9] : [7,9],
+      staringSquares = white ? [55, 54, 53, 52, 51, 50, 49, 48] : [8, 9, 10, 11, 12, 13, 14, 15],
+      legalMovesList = [],
+      possibleMove = pawn + foreward,
       onStartingSquare = staringSquares.indexOf(pawn) !== -1,
-      legalMovesList = [],
-      possibleMove = pawn + 8;
-      onStartingSquare = staringSquares.indexOf(pawn) !== -1;
-      console.log("legalMovesPawnBlack");
+      possibleAttackingMoves,
+      attackingMoves;
+
       if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
         legalMovesList.push(possibleMove);
       }
-      if (onStartingSquare) {
-        possibleMove = possibleMove + 8;
+      console.log("legalMovesList", legalMovesList)
+      if (onStartingSquare && legalMovesList.length) {
+        possibleMove = possibleMove + foreward;
         if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
           legalMovesList.push(possibleMove);
         }
       }
+      possibleAttackingMoves = attack.map(function (i) {
+        return pawn + i;
+      });
+
+      attackingMoves = intersect(possibleAttackingMoves, foes);
+      legalMovesList = legalMovesList.concat(attackingMoves);
+      console.log(legalMovesList)
+
   return legalMovesList;
+
 }
 
-var legalMovesPawnWhite = function (pawn, friends, foes) {
-  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48],
-      onStartingSquare = staringSquares.indexOf(pawn) !== -1;
-      legalMovesList = [],
-      possibleMove = pawn - 8;
-      console.log(onStartingSquare);
-      if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-        legalMovesList.push(possibleMove);
-      }
-      if (onStartingSquare) {
-        possibleMove = possibleMove - 8;
-        if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-          legalMovesList.push(possibleMove);
-        }
-      }
-  return legalMovesList;
+var intersect = function (array1, array2) {
+  return array1.filter(function(n) {
+    return array2.indexOf(n) !== -1;
+  });
 }
 
 var isWhite = function(piece) {
