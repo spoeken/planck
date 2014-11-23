@@ -78,10 +78,10 @@ $(function() {
         } else {
           this.fillStyle = '#aaa';
         }
-        
+
         this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
 
-        // Some array is gonna be a array of possible moves 
+        // Some array is gonna be a array of possible moves
         // if(someArray.indexOf(i)){
         //   this.fillStyle = 'rgba(68, 134, 250, 0.5)';
         //   this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
@@ -98,7 +98,7 @@ $(function() {
     },
 
     mouseup: function(e){
-      
+
       //Find clicked square
       var x = e.x;
       var y = e.y;
@@ -147,8 +147,25 @@ var legalMovesPawn = function (pawn, friends, foes) {
 }
 
 var legalMovesPawnBlack = function (pawn, friends, foes) {
-  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
+  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48];
       onStartingSquare = staringSquares.indexOf(pawn) !== -1,
+      legalMoves = [],
+      possibleMove = pawn - 8;
+      if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
+        legalMoves.push(possibleMove);
+      }
+      if (onStartingSquare) {
+        possibleMove = possibleMove - 8;
+        if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
+          legalMoves.push(possibleMove);
+        }
+      }
+  return legalMoves;
+}
+
+var legalMovesPawnWhite = function (pawn, friends, foes) {
+  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
+      onStartingSquare = isWhite(pawn) && staringSquares.indexOf(pawn);
       legalMoves = [],
       possibleMove = pawn + 8;
       if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
@@ -161,11 +178,6 @@ var legalMovesPawnBlack = function (pawn, friends, foes) {
         }
       }
   return legalMoves;
-}
-
-var legalMovesPawnWhite = function (pawn, friends, foes) {
-  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48];
-      onStartingSquare = isWhite(pawn) && staringSquares.indexOf(pawn);
 }
 
 var isWhite = function(piece) {
