@@ -1,11 +1,13 @@
-var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+//var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+var fen = "rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR";
 var board = [];
+var legalMovesArray = [];
 
 var fenParser = function(fen) {
 
   // console.log('parsing');
-
-  for (var i = fen.length - 1; i >= 0; i--) {
+  for(var i = 0; i < fen.length; i++){
+  // for (var i = fen.length - 1; i >= 0; i--) {
     // console.log(fen[i]);
 
     if (('rbqknpRBQKNP').indexOf(fen[i]) !== -1) {
@@ -81,11 +83,10 @@ $(function() {
 
         this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
 
-        // Some array is gonna be a array of possible moves
-        // if(someArray.indexOf(i)){
-        //   this.fillStyle = 'rgba(68, 134, 250, 0.5)';
-        //   this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
-        // }
+        if(legalMovesArray.indexOf(i) !== -1){
+          this.fillStyle = 'rgba(68, 134, 250, 0.5)';
+          this.fillRect( (i % 8) * this.squareSize,  Math.floor(i/8) * this.squareSize, this.squareSize, this.squareSize);
+        }
 
         var key = board[i];
         if(key !== null){
@@ -106,6 +107,9 @@ $(function() {
       var yIndex = floor(y / this.squareSize);
 
       var index = xIndex + (yIndex*8); //The index of the clicked square
+
+      legalMovesArray = legalMoves(index);
+      console.log(legalMovesArray);
 
 
     }
@@ -135,6 +139,8 @@ var legalMoves = function (piece) {
     case 'P':
       return legalMovesPawn(piece, friends, foes);
       break;
+    default:
+      return [];
   }
 }
 
@@ -147,47 +153,50 @@ var legalMovesPawn = function (pawn, friends, foes) {
 }
 
 var legalMovesPawnBlack = function (pawn, friends, foes) {
-  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48],
+  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
       onStartingSquare = staringSquares.indexOf(pawn) !== -1,
       legalMovesList = [],
-      possibleMove = pawn - 8;
+      possibleMove = pawn + 8;
+      onStartingSquare = staringSquares.indexOf(pawn) !== -1;
+      console.log("legalMovesPawnBlack");
       if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-        legalMoves.push(possibleMove);
+        legalMovesList.push(possibleMove);
       }
       if (onStartingSquare) {
-        possibleMove = possibleMove - 8;
+        possibleMove = possibleMove + 8;
         if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-          legalMoves.push(possibleMove);
+          legalMovesList.push(possibleMove);
         }
       }
   return legalMovesList;
 }
 
 var legalMovesPawnWhite = function (pawn, friends, foes) {
-  var staringSquares = [8, 9, 10, 11, 12, 13, 14, 15],
-      onStartingSquare = isWhite(pawn) && staringSquares.indexOf(pawn);
-      legalMoves = [],
-      possibleMove = pawn + 8;
+  var staringSquares = [55, 54, 53, 52, 51, 50, 49, 48],
+      onStartingSquare = staringSquares.indexOf(pawn) !== -1;
+      legalMovesList = [],
+      possibleMove = pawn - 8;
+      console.log(onStartingSquare);
       if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-        legalMoves.push(possibleMove);
+        legalMovesList.push(possibleMove);
       }
       if (onStartingSquare) {
-        possibleMove = possibleMove + 8;
+        possibleMove = possibleMove - 8;
         if (friends.indexOf(possibleMove) === -1 && foes.indexOf(possibleMove) === -1) {
-          legalMoves.push(possibleMove);
+          legalMovesList.push(possibleMove);
         }
       }
-  return legalMoves;
+  return legalMovesList;
 }
 
 var isWhite = function(piece) {
   // console.log(board[piece]);
-  return 'rbqknp'.indexOf(board[piece]) !== -1;
+  return 'RBQKNP'.indexOf(board[piece]) !== -1;
 }
 
 var isBlack = function(piece) {
   // console.log(board[piece]);
-  return 'RBQKNP'.indexOf(board[piece]) !== -1;
+  return 'rbqknp'.indexOf(board[piece]) !== -1;
 }
 
 var isEmpty = function(piece) {
