@@ -170,7 +170,9 @@ var legalMovesPawn = function (pawn, friends, foes) {
         }
       }
       possibleAttackingMoves = attack.map(function (i) {
-        return pawn + i;
+        if(!isSameRow((pawn + i), pawn)){
+          return pawn + i;
+        }
       });
 
       attackingMoves = intersect(possibleAttackingMoves, foes);
@@ -204,4 +206,8 @@ var isEmpty = function(piece) {
 
 var isSameColor = function(p1, p2) {
   return (isWhite(p1) && isWhite(p2)) || (isBlack(p1) && isBlack(p2));
+}
+
+var isSameRow = function(p1, p2) {
+  return (Math.floor(p1 / 8) === Math.floor(p2 / 8));
 }
