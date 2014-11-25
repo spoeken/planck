@@ -6,6 +6,7 @@
 var fen = "8/8/3k4/pppppppP/PPPPPPPP/PPPPPPPP/2K5/8"
 var board = [];
 var legalMovesArray = [];
+var lastClickedIndex;
 
 var fenParser = function(fen) {
 
@@ -112,9 +113,14 @@ $(function() {
 
       var index = xIndex + (yIndex*8); //The index of the clicked square
 
+      if(legalMovesArray.indexOf(index) !== -1){
+        board[index] = board[lastClickedIndex];
+        board[lastClickedIndex] = null;
+      }
+
       legalMovesArray = legalMoves(index);
       console.log(legalMovesArray);
-
+      lastClickedIndex = index;
 
     }
 
